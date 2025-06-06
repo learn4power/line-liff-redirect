@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Test...</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+    Loading...
+    <script>
+        // ************* 您需要修改的地方 *************
+        const GOOGLE_FORM_URL = https://docs.google.com/forms/d/e/1FAIpQLSeawMWWecNRW9cjN1L5o-0D_xaxQ5ty4b1lWkhopszjliriQA/viewform?usp=pp_url&entry.1116828438=';
+        const LIFF_ID = '2007532921-5ARBnvQY';
+        // *******************************************
+
+        async function main() {
+            await liff.init({ liffId: LIFF_ID });
+            if (!liff.isLoggedIn()) {
+                liff.login();
+            } else {
+                const profile = await liff.getProfile();
+                const userId = profile.userId;
+                window.location.href = GOOGLE_FORM_URL + userId;
+            }
+        }
+        main();
+    </script>
+</body>
+</html>
