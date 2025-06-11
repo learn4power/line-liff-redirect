@@ -1,38 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading Test...</title>
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading...</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
-    Loading...
-    <script>
-        // ************* 您需要修改的地方 *************
-        const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe1j1-_LAY8oZFgkPZLl6IN_lFFAQZ4RfvQgkV6AoMHJLq03g/formResponse?usp=pp_url&entry.1116828438=';
-        const LIFF_ID = '2007552796-4yaWMYB0';
-        // *******************************************
+  Loading...
 
-        async function main() {
-            await liff.init({ liffId: LIFF_ID });
-            if (!liff.isLoggedIn()) {
-                liff.login();
-            } else {
-const userId = profile.userId;
+  <script>
+    // --- 您只需要確認這兩行是您最新的資訊 ---
+    const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe1j1-_LAY8oZFgkPZLl6IN_lFFAQZ4RfvQgkV6AoMHJLq03g/formResponse?usp=pp_url&entry.1116828438=';
+    const LIFF_ID = '2007552796-4yaWMYB0';
+    // -----------------------------------------
 
-// --- 新增的保護機制 ---
-if (userId) {
-  // 只有當 userId 確實存在時，才進行跳轉
-  window.location.href = GOOGLE_FORM_URL + userId;
-} else {
-  // 如果因故沒有拿到 userId，可以在頁面上顯示錯誤訊息
-  document.body.innerHTML = "錯誤：無法取得您的 LINE User ID，請確認您已給予所有權限並重新嘗試。";
-}
-// --- 結束 ---
-            }
+    async function main() {
+      await liff.init({ liffId: LIFF_ID });
+
+      if (liff.isLoggedIn()) {
+        // 如果已登入，就取得使用者資料並跳轉
+        const profile = await liff.getProfile();
+        const userId = profile.userId;
+        
+        if (userId) {
+          window.location.href = GOOGLE_FORM_URL + userId;
+        } else {
+          document.body.innerHTML = "錯誤：無法取得您的 LINE User ID，請重新嘗試。";
         }
-        main();
-    </script>
+      } else {
+        // 如果未登入，就引導使用者登入
+        liff.login();
+      }
+    }
+
+    // 執行主程式
+    main();
+  </script>
 </body>
 </html>
